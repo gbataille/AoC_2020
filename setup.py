@@ -20,7 +20,7 @@ def setup_day(day: int):
             f"https://adventofcode.com/2020/day/{day}/input",
             cookies={
                 'session':
-                "53616c7465645f5fdad1274fa35662cf446990a1b76c0c17ea5a4ce4c6ac34840f7a42b2c7d94a0b88c6711da2a43a88"
+                "53616c7465645f5fb5a5085340e25f56b23f243eb3ca730b69cee444f4d94d51302304415f3d5f16f402dad5f2951a60"
             })
         with open(day_input, 'wb') as input_file:
             input_file.write(resp.content)
