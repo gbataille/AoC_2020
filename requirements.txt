@@ -1,0 +1,6 @@
+requests
+neovim
+flake8
+pylint
+mypy
+yapf
