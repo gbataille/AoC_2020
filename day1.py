@@ -2,8 +2,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import List, Set
 
-from input_utils import get_input
-from log_utils import log
+from utils.input_utils import get_input
+from utils.log_utils import log
 
 if __name__ == '__main__':
     input_str = get_input('1')

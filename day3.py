@@ -3,8 +3,9 @@ from enum import Enum
 from functools import partial, reduce
 from typing import Iterator, List, Set, Tuple
 
-from input_utils import get_input
-from log_utils import log
+from data_struct.two_dimension_map import MapGrid
+from utils.input_utils import get_input
+from utils.log_utils import log
 
 
 def process_input(input_str: str) -> List[List[int]]:
@@ -24,10 +25,10 @@ def count_trees(input_map: List[List[int]], slope: Tuple[int, int]) -> int:
     width = len(input_map[0])
     steps = int(height / slope[1])
     current_position = (0, 0)
-    for i in range(steps - 1):
+    for _i in range(steps - 1):
         current_position = (current_position[0] + slope[0],
                             current_position[1] + slope[1])
-        log(current_position)
+        log(str(current_position))
         tree = input_map[current_position[1]][current_position[0] % width]
         log(f'found tree {tree} at [{current_position[0] % width}, {current_position[1]}]'
             )
@@ -38,6 +39,10 @@ def count_trees(input_map: List[List[int]], slope: Tuple[int, int]) -> int:
 
 if __name__ == '__main__':
     input_str = get_input('3')
+
+    mg = MapGrid.from_string(input_str, lambda x: x)
+    mg.pretty_print()
+
     input_map = process_input(input_str)
     display_map(input_map)
     print("""
