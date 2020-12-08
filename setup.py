@@ -27,6 +27,7 @@ def setup_day(day: int):
 
         with open(f'day{str(day)}.py', 'w') as code_file:
             code_file.write(f"""from dataclasses import dataclass, field
+import os
 from enum import Enum
 from typing import Iterator, List, Set, Tuple, Optional
 
@@ -34,9 +35,20 @@ from utils.input_utils import get_input
 from utils.log_utils import log
 
 
+def get_day_input() -> str:
+    if os.environ.get('TEST'):
+        return ""
+
+    return get_input('{str(day)}')
+
+
+def run(day_input: str) -> None:
+    pass  # YOUR CODE HERE
+
+
 if __name__ == '__main__':
-    input_str = get_input('{str(day)}')
-    print(input_str)""")
+    input_str = get_day_input()
+    run(input_str)""")
 
 
 if __name__ == '__main__':
