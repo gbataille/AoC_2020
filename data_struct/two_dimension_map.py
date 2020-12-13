@@ -24,6 +24,12 @@ class MapGrid(Generic[T]):
         else:
             self.grid = grid
 
+    def __hash__(self):
+        return hash(self.to_string())
+
+    def __eq__(self, other: object) -> bool:
+        return hash(self) == hash(other)
+
     @property
     def height(self):
         return len(self.grid)
@@ -34,6 +40,19 @@ class MapGrid(Generic[T]):
 
     def value_at(self, pos: Position2D) -> T:
         return self.grid[pos.y][pos.x]
+
+    def set_value_at(self, pos: Position2D, value: T) -> None:
+        self.grid[pos.y][pos.x] = value
+
+    @staticmethod
+    def clone(grid: 'MapGrid[T]', mapper: Callable[[T, Position2D],
+                                                   T]) -> 'MapGrid[T]':
+        new_map = MapGrid(grid.grid, copy=True)
+        for y, row in enumerate(new_map.grid):
+            for x, value in enumerate(row):
+                new_map.set_value_at(Position2D(x, y),
+                                     mapper(value, Position2D(x, y)))
+        return new_map
 
     @staticmethod
     def from_matrix(matrix: List[List[T]]) -> "MapGrid[T]":
@@ -68,20 +87,28 @@ class MapGrid(Generic[T]):
         lines = string.split(line_separator)
         return MapGrid.from_string_list(lines, mapper, value_separator)
 
+    def to_string(
+        self,
+        value_separator: str = ' ',
+        line_separator: str = '\n',
+    ) -> str:
+        return line_separator.join(
+            list(map(
+                value_separator.join,  # type: ignore
+                self.grid)))
+
     def pretty_print(
         self,
         value_separator: str = ' ',
         line_separator: str = '\n',
     ) -> None:
-        for line in self.grid:
-            start_of_line = True
-            for value in line:
-                if not start_of_line:
-                    print(value_separator, end='')
+        print(self.to_string(value_separator, line_separator))
 
-                print(value, end='')
+    def count_elem(self, elem_filter: Callable[[T], bool]) -> int:
+        cnt = 0
+        for row in self.grid:
+            for elem in row:
+                if elem_filter(elem):
+                    cnt += 1
 
-                if start_of_line:
-                    start_of_line = False
-
-            print(line_separator, end='')
+        return cnt
