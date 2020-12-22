@@ -1,11 +1,49 @@
 import os
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Iterator, List, Optional, Set, Tuple
+from typing import Iterator, List, Optional, Set, Tuple, Union
 
 from utils import array_utils
 from utils.input_utils import get_input
 from utils.log_utils import log
+
+
+@dataclass
+class Tree:
+    operator: str
+    left_operand: Union[int, 'Tree']
+    right_operand: Union[int, 'Tree']
+
+
+def build_tree(tokens: List[str]) -> Tree:
+    first_char = tokens.pop()
+    if first_char == '(':
+        end_sub_expr = find_matching_closing_reverse(tokens)
+        left_operand = build_tree(tokens[end_sub_expr + 1:])
+        tokens = tokens[:end_sub_expr]
+    else:
+        left_operand = int(first_char)
+
+    tokens.pop()
+    operator = tokens.pop()
+    tokens.pop()
+
+
+def evaluate_tree(tree: Tree) -> int:
+    if type(tree.left_operand) == 'int':
+        left = tree.left_operand
+    else:
+        left = evaluate_tree(tree.left_operand)
+
+    if type(tree.right_operand) == 'int':
+        right = tree.right_operand
+    else:
+        right = evaluate_tree(tree.right_operand)
+
+    if tree.operator == '+':
+        return left + right
+    else:
+        return left * right
 
 
 def get_day_input() -> str:
